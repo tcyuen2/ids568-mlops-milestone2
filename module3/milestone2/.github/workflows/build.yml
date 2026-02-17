@@ -11,16 +11,16 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/ml-service
-
-defaults:
-  run:
-    working-directory: module3/milestone2
+  WORKING_DIR: module3/milestone2
 
 jobs:
   # Job 1: Run Tests
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: module3/milestone2
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
