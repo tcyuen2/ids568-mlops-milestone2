@@ -11,10 +11,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/ml-service
-  WORKING_DIR: module3/milestone2
 
 jobs:
-  # Job 1: Run Tests
   test:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -39,7 +37,6 @@ jobs:
       - name: Run pytest
         run: pytest tests/ -v --tb=short
 
-  # Job 2: Build & Push Docker Image
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest

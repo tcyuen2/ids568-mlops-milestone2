@@ -13,10 +13,12 @@ env:
   IMAGE_NAME: ${{ github.repository }}/ml-service
 
 jobs:
-  # Job 1: Run Tests
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: module3/milestone2
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,7 +37,6 @@ jobs:
       - name: Run pytest
         run: pytest tests/ -v --tb=short
 
-  # Job 2: Build & Push Docker Image
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
@@ -72,7 +73,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: module3/milestone2
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
