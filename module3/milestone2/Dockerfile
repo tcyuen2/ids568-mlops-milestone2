@@ -1,19 +1,15 @@
-# =============================================================================
-# Stage 1: Builder — install Python dependencies into an isolated prefix
-# =============================================================================
+# Stage 1: Builder — install Python dependencies 
 FROM python:3.11-slim AS builder
 
 WORKDIR /build
 
-# Copy only the dependency manifest first to maximise layer caching.
+# Copy only the dependencies from requirements
 COPY app/requirements.txt .
 
-# Install packages into --user prefix so we can copy them cleanly.
+# Install packages 
 RUN pip install --user --no-cache-dir -r requirements.txt
 
-# =============================================================================
-# Stage 2: Runtime — minimal image with only what is needed to serve
-# =============================================================================
+# Stage 2: Runtime
 FROM python:3.11-slim
 
 LABEL maintainer="student@university.edu"
@@ -25,7 +21,7 @@ RUN groupadd -r appuser && useradd -r -g appuser -d /app -s /sbin/nologin appuse
 
 WORKDIR /app
 
-# Copy installed packages from the builder stage
+# Copy installed packages
 COPY --from=builder /root/.local /root/.local
 
 # Copy application code
@@ -34,10 +30,10 @@ COPY app/ .
 # Make sure scripts in .local are usable
 ENV PATH=/root/.local/bin:$PATH
 
-# Expose the default service port
+
 EXPOSE 5000
 
-# Switch to non-root user
+
 USER appuser
 
 # Run with gunicorn for production-grade serving

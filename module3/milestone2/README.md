@@ -1,54 +1,31 @@
-# ML Sentiment Inference Service
+# Milestone 2 - ML Sentiment Analysis Service
 
 ![CI/CD Pipeline](https://github.com/tcyuen2/ids568-mlops-milestone2/actions/workflows/build.yml/badge.svg)
 
-A lightweight, production-ready sentiment analysis API built with Flask and deployed via a multi-stage Docker image with fully automated CI/CD.
+This is a simple sentiment analysis API that takes in text and tells you if it's positive, negative, or neutral. Built with Flask and Docker
 
----
+## How to Run
 
-## Quick Start
-
-### Pull the pre-built image
+Pull the image from the registry:
 
 ```bash
 docker pull ghcr.io/tcyuen2/ids568-mlops-milestone2/ml-service:v1.0.0
 ```
 
-### Run the container
+Run it:
 
 ```bash
-docker run -d -p 5000:5000 --name ml-service ghcr.io/tcyuen2/ids568-mlops-milestone2/ml-service:v1.0.0
+docker run -d -p 5000:5000 ghcr.io/tcyuen2/ids568-mlops-milestone2/ml-service:v1.0.0
 ```
 
-### Test the service
+Test it:
 
 ```bash
-# Health check
 curl http://localhost:5000/health
-
-# Predict sentiment
-curl -X POST http://localhost:5000/predict \
-  -H "Content-Type: application/json" \
-  -d '{"text": "This product is absolutely wonderful"}'
+curl -X POST http://localhost:5000/predict -H "Content-Type: application/json" -d '{"text": "this is great"}'
 ```
 
-Expected response:
-
-```json
-{"label": "positive", "confidence": 0.7}
-```
-
----
-
-## Local Development
-
-### Using Docker Compose
-
-```bash
-docker compose up --build
-```
-
-### Without Docker
+## Run Locally Without Docker
 
 ```bash
 cd app
@@ -56,83 +33,18 @@ pip install -r requirements.txt
 python app.py
 ```
 
-### Running Tests
+## Run Tests
 
 ```bash
 pip install pytest
 pytest tests/ -v
 ```
 
----
+## What's in This Repo
 
-## API Endpoints
-
-| Method | Path       | Description                           |
-|--------|------------|---------------------------------------|
-| GET    | `/`        | Service info and available endpoints  |
-| GET    | `/health`  | Liveness / readiness health check     |
-| POST   | `/predict` | Sentiment prediction (JSON body)      |
-
-### POST `/predict`
-
-**Request body:**
-
-```json
-{"text": "Your input sentence here"}
-```
-
-**Response:**
-
-```json
-{"label": "positive", "confidence": 0.80}
-```
-
----
-
-## Project Structure
-
-```
-module3/milestone2/
-├── .github/workflows/
-│   └── build.yml          # CI/CD pipeline
-├── app/
-│   ├── app.py             # Flask inference service
-│   └── requirements.txt   # Pinned Python dependencies
-├── tests/
-│   └── test_app.py        # Unit tests
-├── .dockerignore           # Build context exclusions
-├── Dockerfile              # Multi-stage container build
-├── docker-compose.yaml     # Local development helper
-├── README.md               # This file
-└── RUNBOOK.md              # Operations runbook
-```
-
----
-
-## CI/CD Pipeline
-
-The GitHub Actions workflow (`.github/workflows/build.yml`) automates:
-
-1. **Test** — installs dependencies and runs `pytest`
-2. **Build** — constructs a multi-stage Docker image
-3. **Authenticate** — logs in to GHCR using `GITHUB_TOKEN`
-4. **Publish** — pushes the image with semantic version tags
-
-Images are only published when tests pass and the push is to `main` or a version tag (`v*.*.*`).
-
----
-
-## Versioning
-
-This project follows [Semantic Versioning](https://semver.org/):
-
-```
-vMAJOR.MINOR.PATCH
-```
-
-Create a new release:
-
-```bash
-git tag v1.0.0
-git push --tags
-```
+- `app/app.py` - the main Flask app
+- `app/requirements.txt` - dependencies
+- `tests/test_app.py` - unit tests
+- `Dockerfile` - multi-stage Docker build
+- `.github/workflows/build.yml` - CI/CD pipeline
+- `RUNBOOK.md` - operations documentation
